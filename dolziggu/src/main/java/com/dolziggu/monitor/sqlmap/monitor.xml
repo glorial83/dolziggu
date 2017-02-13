@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="monitor">
+	<select id="getItemMonitoringList" resultType="com.dolziggu.monitor.vo.ItemMonitoringVO">
+		SELECT
+			SITE_ID AS siteId,
+			SITE_SUB_ID as siteSubId,
+			ITEM_ID as itemId,
+			ITEM_NM as itemNm
+		FROM ITEM_MONITORING
+	</select>
+	
+	<insert id="createItemMonitoring" parameterType="com.dolziggu.monitor.vo.ItemMonitoringVO">
+		INSERT INTO ITEM_MONITORING 
+		(
+			SITE_ID, 
+			SITE_SUB_ID, 
+			ITEM_ID, 
+			ITEM_NM
+		) 
+		VALUES 
+		( 
+			#{siteId, jdbcType=VARCHAR},
+			#{siteSubId, jdbcType=VARCHAR},
+			#{itemId, jdbcType=VARCHAR},
+			#{itemNm, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getItemMonitoringUserList" parameterType="String" resultType="com.dolziggu.monitor.vo.ItemMonitoringUserVO">
+		SELECT
+			SITE_ID as siteId,
+			SITE_SUB_ID as siteSubId,
+			ITEM_ID as itemId,
+			ITEM_NM as itemNm,
+			ITEM_AMT as itemAmt,
+			ITEM_INTERVAL as itemInterval,
+			USER_ID as userId
+		FROM ITEM_MONITORING_USER
+		WHERE ITEM_NM = #{itemNm}
+	</select>
+
+	<insert id="createItemMonitoringUser" parameterType="com.dolziggu.monitor.vo.ItemMonitoringUserVO">
+		INSERT INTO ITEM_MONITORING_USER 
+		(
+			SITE_ID, 
+			SITE_SUB_ID, 
+			ITEM_ID, 
+			ITEM_NM, 
+			ITEM_AMT, 
+			ITEM_INTERVAL,
+			USER_ID
+		) 
+		VALUES 
+		( 
+			#{siteId, jdbcType=VARCHAR},
+			#{siteSubId, jdbcType=VARCHAR},
+			#{itemId, jdbcType=VARCHAR},
+			#{itemNm, jdbcType=VARCHAR},
+			#{itemAmt, jdbcType=INTEGER},
+			#{itemInterval, jdbcType=INTEGER},
+			#{userId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="createItemMonitoringResult" parameterType="com.dolziggu.monitor.vo.ItemMonitoringResultVO">
+		INSERT INTO ITEM_MONITORING_RESULT 
+		(
+			SITE_ID, 
+			SITE_SUB_ID, 
+			ITEM_ID, 
+			ITEM_NM, 
+			MON_VIEWPOINT, 
+			MON_AMT, 
+			MON_URL
+		) 
+		VALUES 
+		( 
+			#{siteId, jdbcType=VARCHAR},
+			#{siteSubId, jdbcType=VARCHAR},
+			#{itemId, jdbcType=VARCHAR},
+			#{itemNm, jdbcType=VARCHAR},
+			sysdate,
+			#{monAmt, jdbcType=INTEGER},
+			#{monUrl, jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

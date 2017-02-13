@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">  
+<!-- log4j.xml의 기본위치는 /web-inf/classes에 있어야 함 -->
+<!-- 그게 아니라면 web.xml에 log4jconfiguration을 지정해야 함 -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">  
+    <!-- 콘솔 로그 -->  
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">  
+        <!-- 패턴 레이아웃 설정.. -->  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="[%d{yyy-MM-dd HH:mm:ss}] %5p (%c:%L) - %m%n"/>  
+        </layout>  
+    </appender>  
+ 
+    <!--  날짜별 로그 -->  
+    <appender name="dailyout" class="org.apache.log4j.DailyRollingFileAppender">  
+        <!-- 이것은 날짜별로  로그를 남김. 파일명.확장자.DatePattern으로 정의 함-->  
+        <param name="file" value="d:/dailyout.log"/>  
+        <param name="Append" value="true"/>  
+        <param name="DatePattern" value="'.'yyMMdd"/>  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="[%d{yyy-MM-dd HH:mm:ss}] %5p (%c:%L) - %m%n"/>  
+        </layout>  
+    </appender>
+    
+    <!--  날짜별 로그 -->
+    <appender name="sqlout" class="org.apache.log4j.DailyRollingFileAppender">  
+        <!-- 이것은 날짜별로  로그를 남김. 파일명.확장자.DatePattern으로 정의 함-->  
+        <param name="file" value="d:/sqlout.log"/>  
+        <param name="Append" value="true"/>  
+        <param name="DatePattern" value="'.'yyMMdd"/>  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="[%d{yyy-MM-dd HH:mm:ss}] %5p (%c:%L) - %m%n"/>  
+        </layout>  
+    </appender>
+ 
+    <!-- xml 로그-->  
+    <!-- xml형식으로 로그를 남김 -->  
+    <appender name="xmlout" class="org.apache.log4j.FileAppender">  
+        <param name="file" value="d:/xmlout.xml"/>  
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.xml.XMLLayout"/>  
+    </appender>
+    
+    <!-- 
+	   	LOG LEVEL
+	    FATAL	100
+		ERROR	200
+		WARN	300
+		INFO	400
+		DEBUG	500
+		TRACE	600
+	-->
+    
+    <!-- root 로거 기본 설정 -->
+    <root>  
+        <level value="DEBUG"/>  
+        <appender-ref ref="dailyout"/>  
+        <appender-ref ref="stdout" />
+    </root>
+    
+    <!-- logger말고 category는 deprecated된 class임 -->
+	<logger name="java.sql">
+		<!-- 1. additivity="false"를 설정하지 않고 아래 appender-ref를 선언하지 않으면 root에서 선언한 모든 appender에 출력됨 -->
+		<!-- 2. root에서 선언한 모든 appender에 출력하려면 additivity와 appender-ref를 제거 할 것 -->
+		<!-- 3. root에서 선언한 모든 appender와 그외의 별도 appender에 출력하려면 appender-ref만 선언 -->
+		<priority value ="DEBUG" />
+	</logger>
+	
+	<logger name="org.apache" additivity="false">
+		<priority value ="DEBUG" />
+	    <appender-ref ref="dailyout" />
+	    <appender-ref ref="sqlout" />
+	</logger>
+ 
+    <!-- 특정 로거 설정 -->
+    <logger name="com.dolziggu" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="dailyout" />
+        <appender-ref ref="stdout" />
+    </logger> 
+</log4j:configuration> 
